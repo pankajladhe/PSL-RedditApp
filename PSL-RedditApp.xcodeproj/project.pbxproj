@@ -19,6 +19,8 @@
 		887CF96F251EFC1700DC7D9A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887CF96E251EFC1700DC7D9A /* Model.swift */; };
 		88BB9DB2252039E100BF51B8 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BB9DB1252039E100BF51B8 /* Extension.swift */; };
 		88BB9DB425203B3A00BF51B8 /* NewsCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BB9DB325203B3A00BF51B8 /* NewsCellTableViewCell.swift */; };
+		B76CF2492580526400056EE6 /* NewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76CF2482580526400056EE6 /* NewsViewModel.swift */; };
+		B76CF25325806C7C00056EE6 /* AlertControllerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B76CF25225806C7C00056EE6 /* AlertControllerUtil.swift */; };
 		C2EE7BA3AE5D36DFC940EBDC /* Pods_PSL_RedditAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4A8567893E945A0B287527 /* Pods_PSL_RedditAppTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,8 @@
 		88BB9DB1252039E100BF51B8 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		88BB9DB325203B3A00BF51B8 /* NewsCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCellTableViewCell.swift; sourceTree = "<group>"; };
 		B12408DB1A5E117A3EE8AE96 /* Pods-PSL-RedditAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSL-RedditAppTests.debug.xcconfig"; path = "Target Support Files/Pods-PSL-RedditAppTests/Pods-PSL-RedditAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B76CF2482580526400056EE6 /* NewsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModel.swift; sourceTree = "<group>"; };
+		B76CF25225806C7C00056EE6 /* AlertControllerUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertControllerUtil.swift; sourceTree = "<group>"; };
 		B933125E2BA9F63AD2623A55 /* Pods-PSL-RedditAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSL-RedditAppTests.release.xcconfig"; path = "Target Support Files/Pods-PSL-RedditAppTests/Pods-PSL-RedditAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE4A8567893E945A0B287527 /* Pods_PSL_RedditAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PSL_RedditAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7C4625C347AC860D029D993 /* Pods-PSL-RedditApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSL-RedditApp.release.xcconfig"; path = "Target Support Files/Pods-PSL-RedditApp/Pods-PSL-RedditApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,10 +115,12 @@
 				887CF946251EE85900DC7D9A /* AppDelegate.swift */,
 				887CF94A251EE85900DC7D9A /* ViewController.swift */,
 				887CF96E251EFC1700DC7D9A /* Model.swift */,
+				B76CF2482580526400056EE6 /* NewsViewModel.swift */,
 				88BB9DB1252039E100BF51B8 /* Extension.swift */,
 				88BB9DB325203B3A00BF51B8 /* NewsCellTableViewCell.swift */,
 				887CF968251EECDE00DC7D9A /* NetworkAPIManager.swift */,
 				887CF96A251EF1B500DC7D9A /* NewsManager.swift */,
+				B76CF25225806C7C00056EE6 /* AlertControllerUtil.swift */,
 				887CF96C251EF2EA00DC7D9A /* Constants.swift */,
 				887CF94F251EE85C00DC7D9A /* Assets.xcassets */,
 				887CF951251EE85C00DC7D9A /* LaunchScreen.storyboard */,
@@ -311,6 +317,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				887CF96D251EF2EA00DC7D9A /* Constants.swift in Sources */,
+				B76CF2492580526400056EE6 /* NewsViewModel.swift in Sources */,
+				B76CF25325806C7C00056EE6 /* AlertControllerUtil.swift in Sources */,
 				887CF969251EECDE00DC7D9A /* NetworkAPIManager.swift in Sources */,
 				88BB9DB2252039E100BF51B8 /* Extension.swift in Sources */,
 				887CF94B251EE85900DC7D9A /* ViewController.swift in Sources */,

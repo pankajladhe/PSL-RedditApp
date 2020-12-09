@@ -11,26 +11,46 @@ import UIKit
 class ViewController: UIViewController {
     
     let tableView = UITableView()
-    var safeArea = UILayoutGuide()
-    let stackView   = UIStackView()
+    var safeArea  = UILayoutGuide()
+    let stackView = UIStackView()
     
     let CellIdentifier = Constants.CellIdentifier
-    var feedManager = NewsManager()
     var totalResult: [Child] = []
-    
-    //To Fetch next sets of data
-    var afterLink: String?
-    var beforeLink: String?
+    var newsViewModel: NewsViewModel?
     
     override func loadView() {
         super.loadView()
-        showLoader()
+        setupNotificationSubscription()
         initialSetup()
         setupTableView()
-        fetchFeedResult(url: Constants.baseUrl)
+        instantiateViewModels()
     }
     
     // MARK: - Private Methods
+    
+    
+    func setupNotificationSubscription() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onDataFetchSuccess), name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_SUCCESS), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onDataFetchFailure), name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_FAILED), object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeNoificationSubscriptions()
+    }
+    
+    func removeNoificationSubscriptions() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_SUCCESS), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_FAILED), object: nil)
+    }
+    
+    func instantiateViewModels() {
+        self.newsViewModel = NewsViewModel();
+        self.tableView.isHidden = true
+        newsViewModel!.showLoader(myView: self.view)
+        newsViewModel!.fetchFeedResult(url: Constants.baseUrl)
+    }
+    
     private func initialSetup() {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
@@ -53,49 +73,25 @@ class ViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
     }
     
-    private func fetchFeedResult(url: String) {
-        feedManager.getFeedResult( urlString: url, completionHandler:{ receivedModel in
-            guard let modelData = receivedModel else {
-                //Error Handling
-                let alert = UIAlertController(title: "Alert", message: Constants.genericErrorMessage, preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            self.totalResult.append(contentsOf: modelData.children)
-            self.afterLink = modelData.after
-            self.tableView.reloadData()
-            self.hideLoader()
-        })
-    }
-    
-    private func showLoader() {
-        self.tableView.isHidden = true
-        feedManager.showHUD(thisView: self.view)
-    }
-    
-    private func hideLoader() {
+    @objc func onDataFetchSuccess() {
+        self.totalResult = self.newsViewModel!.totalResult
+        self.tableView.reloadData()
         self.tableView.isHidden = false
-        feedManager.hideHUD()
     }
     
-    private func loadMore() {
-        // To prevent multiple API call
-        if self.beforeLink == self.afterLink{
-            return
-        }
-        if let after = self.afterLink {
-            self.beforeLink = self.afterLink
-            fetchFeedResult(url: Constants.fetchMoreUrl + after)
-        }
+    @objc func onDataFetchFailure() {
+        self.tableView.reloadData()
+        self.tableView.isHidden = true
+        AlertControllerUtil.showAlert(viewController: self, title: Constants.DATA_FETCH_ERROR_TITLE, message: Constants.DATA_FETCH_ERROR_MESSAGE)
     }
+  
 }
 
 // MARK: - Extension
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.totalResult.count
+        return self.totalResult.count  
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -107,7 +103,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             //Load more data if reach bottom of tableview
             if indexPath.row == totalResult.count - Constants.refreshOnScrollNo {
-                self.loadMore()
+                newsViewModel!.showLoader(myView: self.view)
+                newsViewModel!.loadMore()
             }
             return cell
         } else {
