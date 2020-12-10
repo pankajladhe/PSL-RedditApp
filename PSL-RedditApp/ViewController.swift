@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     let stackView = UIStackView()
     
     let CellIdentifier = Constants.CellIdentifier
-    var totalResult: [Child] = []
+    var feedManager = NewsManager()
     var newsViewModel: NewsViewModel?
     
     override func loadView() {
@@ -27,8 +27,6 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    
-    
     func setupNotificationSubscription() {
         NotificationCenter.default.addObserver(self, selector: #selector(onDataFetchSuccess), name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_SUCCESS), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onDataFetchFailure), name: NSNotification.Name(rawValue: Constants.NEWS_ARRIVED_FAILED), object: nil)
@@ -47,7 +45,7 @@ class ViewController: UIViewController {
     func instantiateViewModels() {
         self.newsViewModel = NewsViewModel();
         self.tableView.isHidden = true
-        newsViewModel!.showLoader(myView: self.view)
+        feedManager.showHUD(thisView: self.view)
         newsViewModel!.fetchFeedResult(url: Constants.baseUrl)
     }
     
@@ -74,9 +72,9 @@ class ViewController: UIViewController {
     }
     
     @objc func onDataFetchSuccess() {
-        self.totalResult = self.newsViewModel!.totalResult
         self.tableView.reloadData()
         self.tableView.isHidden = false
+        feedManager.hideHUD()
     }
     
     @objc func onDataFetchFailure() {
@@ -84,26 +82,27 @@ class ViewController: UIViewController {
         self.tableView.isHidden = true
         AlertControllerUtil.showAlert(viewController: self, title: Constants.DATA_FETCH_ERROR_TITLE, message: Constants.DATA_FETCH_ERROR_MESSAGE)
     }
-  
+    
+   
 }
 
 // MARK: - Extension
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.totalResult.count  
+        return  self.newsViewModel?.totalResult.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(NewsCellTableViewCell.self), for: indexPath) as? NewsCellTableViewCell{
             
             //Setting the data to the custom cell
-            let cellData = totalResult[indexPath.row]
+            let cellData = self.newsViewModel?.totalResult[indexPath.row]
             cell.childData = cellData
             
             //Load more data if reach bottom of tableview
-            if indexPath.row == totalResult.count - Constants.refreshOnScrollNo {
-                newsViewModel!.showLoader(myView: self.view)
+            if indexPath.row == self.newsViewModel!.totalResult.count - Constants.refreshOnScrollNo {
+                feedManager.showHUD(thisView: self.view)
                 newsViewModel!.loadMore()
             }
             return cell

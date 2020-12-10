@@ -6,7 +6,7 @@
 //  Copyright © 2020 PSL All rights reserved.
 //
 
-import UIKit
+
 import Foundation
 
 class NewsViewModel {
@@ -28,7 +28,7 @@ class NewsViewModel {
             self.totalResult.append(contentsOf: modelData.children)
             self.afterLink = modelData.after
             NotificationCenter.default.post(name: Notification.Name(Constants.NEWS_ARRIVED_SUCCESS), object: nil)
-            self.hideLoader()
+            
         })
     }
     
@@ -42,14 +42,5 @@ class NewsViewModel {
             fetchFeedResult(url: Constants.fetchMoreUrl + after)
         }
     }
-    
-     func showLoader(myView : UIView) {
-           feedManager.showHUD(thisView: myView)
-       }
-       
-    private  func hideLoader() {
-           feedManager.hideHUD()
-       }
-    
    
 }
